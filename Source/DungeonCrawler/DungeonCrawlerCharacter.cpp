@@ -2,6 +2,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SpotLightComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -13,6 +14,14 @@ ADungeonCrawlerCharacter::ADungeonCrawlerCharacter()
 
 	// set our turn rate for input
 	TurnRateGamepad = 50.f;
+
+	//Define var HealthSystem
+	this->health = 100.0f;
+	this->isDead = false;
+
+	//Define FlashLight var
+	this->intensity = 2300.0f;
+	this->outerConeAngle = 26.0f;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -34,13 +43,23 @@ ADungeonCrawlerCharacter::ADungeonCrawlerCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character
+	CameraBoom->TargetArmLength = 150.0f; // The camera follows at this distance behind the character
+	CameraBoom->SetRelativeLocation(FVector(0.0f,0.0f,70.0f));
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	//Create a FlashLight
+	FlashLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("FlashLight"));
+	
+	FlashLight->OuterConeAngle = outerConeAngle;
+	FlashLight->Intensity = this->intensity;
+	
+	FlashLight->AddLocalRotation(FRotator(90.0f,0.0f,0.0f));
+	FlashLight->AttachToComponent(this->FindComponentByClass<USceneComponent>(),FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("hand_r"));
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -55,6 +74,7 @@ void ADungeonCrawlerCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("FlashLight", IE_Pressed,this, &ADungeonCrawlerCharacter::TurnFlashLight);
 
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &ADungeonCrawlerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &ADungeonCrawlerCharacter::MoveRight);
@@ -70,6 +90,12 @@ void ADungeonCrawlerCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	// handle touch devices
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &ADungeonCrawlerCharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &ADungeonCrawlerCharacter::TouchStopped);
+}
+
+void ADungeonCrawlerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
 }
 
 void ADungeonCrawlerCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
@@ -122,3 +148,29 @@ void ADungeonCrawlerCharacter::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 	}
 }
+
+//Apply Damage Function 
+void ADungeonCrawlerCharacter::ApplyDamage(float damage)
+{
+	this->ReduceHealth(damage);
+	this->PlayerIsDead();
+}
+
+//Turn on / off the flash light
+void ADungeonCrawlerCharacter::TurnFlashLight()
+{
+	this->FlashLight->ToggleVisibility();
+}
+
+//Check if the player is dead or not 
+void ADungeonCrawlerCharacter::PlayerIsDead()
+{
+	if(this->health <= 0)
+	{
+		this->isDead = true;
+	}
+}
+
+
+
+

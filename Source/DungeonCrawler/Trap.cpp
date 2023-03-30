@@ -11,12 +11,25 @@ ATrap::ATrap()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	SetActorEnableCollision(true);
+
+	this->SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
+	
+	this->SphereCollider->InitSphereRadius(150.0f);
+	this->SphereCollider->SetGenerateOverlapEvents(true);
+	this->SphereCollider->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	
+	this->SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &ATrap::OnOverlapBegin);
+	this->SphereCollider->SetupAttachment(RootComponent);
+
 }
 
 // Called when the game starts or when spawned
 void ATrap::BeginPlay()
 {
 	Super::BeginPlay();
+
+	damage = FMath::RandRange(10,35);
 	
 }
 
@@ -30,7 +43,13 @@ void ATrap::Tick(float DeltaTime)
 void ATrap::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
 {
-	
+	ADungeonCrawlerCharacter* player = Cast<ADungeonCrawlerCharacter>(OtherActor);
+
+	if(player != nullptr && OtherActor != this && OtherComp)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Apply Damage"));
+		player->ApplyDamage(damage);
+	}
 }
 
 

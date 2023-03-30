@@ -8,14 +8,6 @@ UCLASS(config=Game)
 class ADungeonCrawlerCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
-	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
 	
 public:
 	ADungeonCrawlerCharacter();
@@ -27,7 +19,16 @@ public:
 
 	/**Based on the health system, storage the health*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Stats)
-	float health = 100.0f;
+	float health;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=FlashLight)
+	float intensity;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=FlashLight)
+	float outerConeAngle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=boolState)
+	bool isDead;
 
 protected:
 	
@@ -36,6 +37,9 @@ protected:
 
 	/** Called for side to side input */
 	void MoveRight(float Value);
+
+	/** Called to turn on/off the flash light*/
+	void TurnFlashLight();
 
 	/** 
 	 * Called via input to turn at a given rate. 
@@ -61,6 +65,20 @@ protected:
 	// End of APawn interface
 
 public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+	
+	/** Camera boom positioning the camera behind the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+	/** Follow camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FlashLight, meta = (AllowPrivateAccess = "true"))
+	class USpotLightComponent* FlashLight;
+	
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
@@ -74,5 +92,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="HealthSystem")
 	float AddHealth(float value) { return health += value;}
+
+	UFUNCTION(BlueprintCallable, Category="HealthSystem")
+	void PlayerIsDead();
+
+	UFUNCTION(BlueprintCallable, Category="DamageSystem")
+	void ApplyDamage(float damage);
 };
 
