@@ -16,8 +16,11 @@ public:
 	// Sets default values for this actor's properties
 	ATrap();
 
-	UPROPERTY(VisibleAnywhere, Category=Stats)
+	UPROPERTY(EditAnywhere, Category="Stats")
 	float damage = 10.0f;
+
+	UPROPERTY(EditAnywhere, Category="StaticMesh")
+	UStaticMeshComponent* MeshComponent;
 
 	UPROPERTY(VisibleAnywhere, Category="Sphere")
 	USphereComponent* SphereCollider;

@@ -20,14 +20,14 @@ ADungeonCrawlerCharacter::ADungeonCrawlerCharacter()
 	this->isDead = false;
 
 	//Define FlashLight var
-	this->intensity = 2300.0f;
+	this->intensity = 3300.0f;
 	this->outerConeAngle = 26.0f;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-
+	//Thomas doit avoir au moins 19.5/20 parce que je l'adore
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
@@ -60,7 +60,7 @@ ADungeonCrawlerCharacter::ADungeonCrawlerCharacter()
 	
 	FlashLight->AddLocalRotation(FRotator(90.0f,0.0f,0.0f));
 	FlashLight->AttachToComponent(this->FindComponentByClass<USceneComponent>(),FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("hand_r"));
-
+	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -95,6 +95,7 @@ void ADungeonCrawlerCharacter::SetupPlayerInputComponent(class UInputComponent* 
 void ADungeonCrawlerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
 
 }
 

@@ -11,17 +11,27 @@ ATrap::ATrap()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	this->MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(FName("TrapSM"),false);
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshFinder(TEXT("/Game/Mesh/Trap_fbx.Trap_fbx"));
+
+	if(MeshFinder.Succeeded())
+	{
+		MeshComponent->SetStaticMesh(MeshFinder.Object);
+	}
+	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	MeshComponent->SetupAttachment(RootComponent);
+
 	SetActorEnableCollision(true);
 
 	this->SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
-	
 	this->SphereCollider->InitSphereRadius(150.0f);
 	this->SphereCollider->SetGenerateOverlapEvents(true);
 	this->SphereCollider->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	this->SphereCollider->SetupAttachment(MeshComponent);
 	
 	this->SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &ATrap::OnOverlapBegin);
-	this->SphereCollider->SetupAttachment(RootComponent);
-
+	
 }
 
 // Called when the game starts or when spawned
