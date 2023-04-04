@@ -37,3 +37,11 @@ void ADoor::Tick(float DeltaTime)
 
 }
 
+void ADoor::TranslateDoor()
+{
+	FRotator currentRotation = this->GetActorRotation();
+	
+	this->SetActorRotation(FRotator(currentRotation.Pitch,70.0f,currentRotation.Roll));
+}
+
+

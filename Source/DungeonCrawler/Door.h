@@ -28,4 +28,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//Open Door
+	UFUNCTION(BlueprintCallable, Category="OpenDoor")
+	void TranslateDoor();
+
 };

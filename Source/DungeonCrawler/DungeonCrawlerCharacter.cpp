@@ -5,6 +5,7 @@
 #include "Components/SpotLightComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "Door.h"
 #include "GameFramework/SpringArmComponent.h"
 
 ADungeonCrawlerCharacter::ADungeonCrawlerCharacter()
@@ -75,6 +76,7 @@ void ADungeonCrawlerCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("FlashLight", IE_Pressed,this, &ADungeonCrawlerCharacter::TurnFlashLight);
+	PlayerInputComponent->BindAction("OpenDoor", IE_Pressed,this, &ADungeonCrawlerCharacter::LineTraceForObjects);
 
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &ADungeonCrawlerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &ADungeonCrawlerCharacter::MoveRight);
@@ -95,8 +97,6 @@ void ADungeonCrawlerCharacter::SetupPlayerInputComponent(class UInputComponent* 
 void ADungeonCrawlerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-
 }
 
 void ADungeonCrawlerCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
@@ -171,6 +171,33 @@ void ADungeonCrawlerCharacter::PlayerIsDead()
 		this->isDead = true;
 	}
 }
+
+//Make a line trace for objects -> open door 
+void ADungeonCrawlerCharacter::LineTraceForObjects()
+{
+	FHitResult OutHit;
+	FCollisionQueryParams CollisionQueryParams;
+	
+	FVector Start;
+	FRotator CameraRotator;
+	
+	GetController()->GetPlayerViewPoint(Start,CameraRotator);
+	FVector End = Start + (CameraRotator.Vector() * 1000.0f);
+
+	bool bHitObject = GetWorld()->LineTraceSingleByChannel(OutHit,Start,End,ECC_Visibility,CollisionQueryParams);
+
+	DrawDebugLine(GetWorld(),Start,End,FColor::Red,false,2.0f);
+
+	ADoor* door = Cast<ADoor>(OutHit.GetActor());
+	
+	if(bHitObject && door != nullptr)
+	{
+		//Open Door
+		door->TranslateDoor();
+		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, FString::Printf(TEXT("The Component Being Hit is: %s"), *OutHit.GetComponent()->GetName()));
+	}
+}
+
 
 
 

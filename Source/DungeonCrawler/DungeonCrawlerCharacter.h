@@ -98,5 +98,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="DamageSystem")
 	void ApplyDamage(float damage);
+
+	UFUNCTION(BlueprintCallable, Category="LineTraceObjects")
+	void LineTraceForObjects();
+	
 };
 
