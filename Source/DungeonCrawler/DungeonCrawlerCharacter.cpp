@@ -6,6 +6,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "Door.h"
+#include "BFL_Main.h"
+#include "KeyActor.h"
 #include "GameFramework/SpringArmComponent.h"
 
 ADungeonCrawlerCharacter::ADungeonCrawlerCharacter()
@@ -24,6 +26,8 @@ ADungeonCrawlerCharacter::ADungeonCrawlerCharacter()
 	this->intensity = 3300.0f;
 	this->outerConeAngle = 26.0f;
 
+	
+	
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -177,6 +181,8 @@ void ADungeonCrawlerCharacter::LineTraceForObjects()
 {
 	FHitResult OutHit;
 	FCollisionQueryParams CollisionQueryParams;
+
+	float delay = 5.0f;
 	
 	FVector Start;
 	FRotator CameraRotator;
@@ -188,13 +194,19 @@ void ADungeonCrawlerCharacter::LineTraceForObjects()
 
 	DrawDebugLine(GetWorld(),Start,End,FColor::Red,false,2.0f);
 
+	//Get Actors
 	ADoor* door = Cast<ADoor>(OutHit.GetActor());
+	AKeyActor* keyactor = Cast<AKeyActor>(OutHit.GetActor());
 	
-	if(bHitObject && door != nullptr)
+	if(bHitObject && door != nullptr && this->characterInventory.Contains(keyInventory) && (!door->isOpen))
 	{
-		//Open Door
 		door->TranslateDoor();
-		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, FString::Printf(TEXT("The Component Being Hit is: %s"), *OutHit.GetComponent()->GetName()));
+	}
+	
+	if(bHitObject && keyactor != nullptr)
+	{
+		UBFL_Main::AddActorInventory(this,keyactor,1);
+		this->keyInventory = keyactor;
 	}
 }
 

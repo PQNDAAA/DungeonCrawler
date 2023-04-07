@@ -3,6 +3,7 @@
 
 #include "Door.h"
 
+
 // Sets default values
 ADoor::ADoor()
 {
@@ -35,13 +36,33 @@ void ADoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	this->startRotation = this->GetActorRotation();
+	
+	if(this->isOpen)
+	{
+		if(this->WaitTime > 0)
+		{
+			WaitTime -= DeltaTime;
+			return;
+		}
+
+		if(timeElapsed < lerpDuration)
+		{
+
+			FRotator newRotator = FMath::Lerp(startRotation, targetRotator, timeElapsed / lerpDuration);
+		
+			this->SetActorRotation(newRotator);
+
+			timeElapsed += DeltaTime;
+		}
+	}
 }
 
 void ADoor::TranslateDoor()
 {
-	FRotator currentRotation = this->GetActorRotation();
-	
-	this->SetActorRotation(FRotator(currentRotation.Pitch,70.0f,currentRotation.Roll));
+	this->isOpen = true;
 }
+
+
 
 

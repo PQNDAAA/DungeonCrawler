@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "KeyActor.h"
 #include "GameFramework/Character.h"
 #include "DungeonCrawlerCharacter.generated.h"
 
@@ -16,19 +17,38 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Input)
 	float TurnRateGamepad;
 
+	/** Camera boom positioning the camera behind the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+	/** Follow camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FlashLight, meta = (AllowPrivateAccess = "true"))
+	class USpotLightComponent* FlashLight;
 
 	/**Based on the health system, storage the health*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Stats)
 	float health;
 
+	/**FlashLight intensity*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=FlashLight)
 	float intensity;
 
+	/**FlashLight cone angle*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=FlashLight)
 	float outerConeAngle;
 
+	/**Check if the player is dead */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=boolState)
 	bool isDead;
+
+	/**Player Inventory*/
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category=Inventory)
+	TMap<AActor*, int32> characterInventory;
+
+	AKeyActor* keyInventory;
 
 protected:
 	
@@ -40,7 +60,6 @@ protected:
 
 	/** Called to turn on/off the flash light*/
 	void TurnFlashLight();
-
 	/** 
 	 * Called via input to turn at a given rate. 
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
@@ -64,20 +83,10 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
 
-public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
 
-	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FlashLight, meta = (AllowPrivateAccess = "true"))
-	class USpotLightComponent* FlashLight;
+public:
 	
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
