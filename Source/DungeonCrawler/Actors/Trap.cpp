@@ -2,7 +2,6 @@
 
 
 #include "Trap.h"
-#include "DungeonCrawlerCharacter.h"
 
 // Sets default values
 ATrap::ATrap()

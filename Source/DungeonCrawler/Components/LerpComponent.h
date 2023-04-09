@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
+#include "DungeonCrawler\Actors\Door.h"
 #include "LerpComponent.generated.h"
 
 

@@ -6,9 +6,6 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "BFL_Main.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class DUNGEONCRAWLER_API UBFL_Main : public UBlueprintFunctionLibrary
 {

@@ -4,16 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "EndGameTeleport.generated.h"
+#include "TeleporterEndGame.generated.h"
 
 UCLASS()
-class DUNGEONCRAWLER_API AEndGameTeleport : public AActor
+class DUNGEONCRAWLER_API ATeleporterEndGame : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AEndGameTeleport();
+	ATeleporterEndGame();
+
+	UPROPERTY(VisibleAnywhere, Category="Sphere")
+	USphereComponent* SphereCollider;
 
 protected:
 	// Called when the game starts or when spawned

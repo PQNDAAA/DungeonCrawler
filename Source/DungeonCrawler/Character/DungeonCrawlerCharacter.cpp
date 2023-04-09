@@ -5,9 +5,6 @@
 #include "Components/SpotLightComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
-#include "Door.h"
-#include "BFL_Main.h"
-#include "KeyActor.h"
 #include "GameFramework/SpringArmComponent.h"
 
 ADungeonCrawlerCharacter::ADungeonCrawlerCharacter()

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SphereComponent.h"
+#include "DungeonCrawler/Character/DungeonCrawlerCharacter.h"
 #include "GameFramework/Actor.h"
 #include "Trap.generated.h"
 

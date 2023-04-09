@@ -1,7 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "KeyActor.h"
+#include "DungeonCrawler/Actors/KeyActor.h"
+#include "DungeonCrawler/Library/BFL_Main.h"
+#include "DungeonCrawler/Actors/Door.h"
 #include "GameFramework/Character.h"
 #include "DungeonCrawlerCharacter.generated.h"
 

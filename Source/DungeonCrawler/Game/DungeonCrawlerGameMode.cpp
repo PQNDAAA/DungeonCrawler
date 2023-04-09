@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "DungeonCrawlerGameMode.h"
-#include "DungeonCrawlerCharacter.h"
+#include "DungeonCrawler/Character/DungeonCrawlerCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 ADungeonCrawlerGameMode::ADungeonCrawlerGameMode()

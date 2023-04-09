@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "DungeonCrawlerCharacter.h"
+#include "DungeonCrawler/Character/DungeonCrawlerCharacter.h"
 #include "BFL_Main.h"
 
 void UBFL_Main::AddActorInventory(AActor* targetPlayer,AActor* actor, int32 quantity)
