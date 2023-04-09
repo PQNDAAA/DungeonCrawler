@@ -88,6 +88,12 @@ protected:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//Called at the beginning
+	virtual void BeginPlay() override;
+
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+		AActor* DamageCauser) override;
+	
 public:
 	
 	/** Returns CameraBoom subobject **/
@@ -107,11 +113,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="HealthSystem")
 	void PlayerIsDead();
 
-	UFUNCTION(BlueprintCallable, Category="DamageSystem")
-	void ApplyDamage(float damage);
-
 	UFUNCTION(BlueprintCallable, Category="LineTraceObjects")
 	void LineTraceForObjects();
+	
 	
 };
 

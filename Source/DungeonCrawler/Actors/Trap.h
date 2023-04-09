@@ -17,12 +17,15 @@ public:
 	// Sets default values for this actor's properties
 	ATrap();
 
+	/**Default value to inflict damage*/ 
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float damage = 10.0f;
 
+	//Static Mesh
 	UPROPERTY(EditAnywhere, Category="StaticMesh")
 	UStaticMeshComponent* MeshComponent;
 
+	//Sphere Collider 
 	UPROPERTY(VisibleAnywhere, Category="Sphere")
 	USphereComponent* SphereCollider;
 
@@ -41,5 +44,7 @@ public:
 		int32 OtherBodyIndex,
 		bool bFromSweep,
 		const FHitResult& SweepResult);
+
+	
 
 };

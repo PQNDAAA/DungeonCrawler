@@ -3,6 +3,8 @@
 
 #include "Trap.h"
 
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 ATrap::ATrap()
 {
@@ -56,8 +58,10 @@ void ATrap::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 	if(player != nullptr && OtherActor != this && OtherComp)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Apply Damage"));
-		player->ApplyDamage(damage);
+		OtherActor->TakeDamage(damage,FDamageEvent(UDamageType::StaticClass()),GetOwner()->GetInstigatorController(),this);
+		
 	}
 }
+
 
 

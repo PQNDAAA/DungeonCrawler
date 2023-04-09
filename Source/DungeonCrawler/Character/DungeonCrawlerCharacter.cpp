@@ -95,6 +95,12 @@ void ADungeonCrawlerCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	PlayerInputComponent->BindTouch(IE_Released, this, &ADungeonCrawlerCharacter::TouchStopped);
 }
 
+void ADungeonCrawlerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+
 void ADungeonCrawlerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -151,13 +157,6 @@ void ADungeonCrawlerCharacter::MoveRight(float Value)
 	}
 }
 
-//Apply Damage Function 
-void ADungeonCrawlerCharacter::ApplyDamage(float damage)
-{
-	this->ReduceHealth(damage);
-	this->PlayerIsDead();
-}
-
 //Turn on / off the flash light
 void ADungeonCrawlerCharacter::TurnFlashLight()
 {
@@ -206,6 +205,17 @@ void ADungeonCrawlerCharacter::LineTraceForObjects()
 		this->keyInventory = keyactor;
 	}
 }
+
+float ADungeonCrawlerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+	AController* EventInstigator, AActor* DamageCauser)
+{
+	this->ReduceHealth(DamageAmount);
+	this->PlayerIsDead();
+
+	return DamageAmount;
+}
+
+
 
 
 
