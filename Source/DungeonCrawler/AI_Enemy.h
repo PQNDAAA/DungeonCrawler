@@ -26,8 +26,14 @@ public:
 	UPROPERTY(VisibleAnywhere, Category="Sphere")
 	USphereComponent* SphereCollider;
 
-	UPROPERTY(EditAnywhere, Category="Damage")
+	UPROPERTY(EditAnywhere, Category="Damage System")
 	float damage = 10.f;
+
+	UPROPERTY(EditAnywhere, Category="Health System")
+	float health = 40.f;
+
+	UPROPERTY(EditAnywhere, Category="Walk System")
+	float speedMovement = 800.f;
 
 protected:
 	// Called when the game starts or when spawned
