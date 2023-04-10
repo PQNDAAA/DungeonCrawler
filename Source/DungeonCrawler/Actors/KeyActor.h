@@ -14,7 +14,8 @@ class DUNGEONCRAWLER_API AKeyActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AKeyActor();
-	
+
+	//MeshComponent 
 	UPROPERTY(EditAnywhere, Category="StaticMesh")
 	UStaticMeshComponent* MeshComponent;
 	

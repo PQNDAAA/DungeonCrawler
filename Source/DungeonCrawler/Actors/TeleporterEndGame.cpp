@@ -9,6 +9,7 @@ ATeleporterEndGame::ATeleporterEndGame()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	//Initialize the sphere collider
 	this->SphereCollider = CreateDefaultSubobject<USphereComponent>(FName("SphereCollider"),false);
 	this->SphereCollider->InitSphereRadius(150.0f);
 	this->SphereCollider->SetGenerateOverlapEvents(true);

@@ -27,7 +27,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-	//Flash Light Component
+	/** Flash Light */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FlashLight, meta = (AllowPrivateAccess = "true"))
 	class USpotLightComponent* FlashLight;
 
@@ -35,18 +35,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Health System")
 	float health;
 
+	/**is Activated when the player is dead */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="boolState")
 	bool isDead = false;
 
+	/**The damages the player inflicts*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Damage System")
 	float damage;
 
 	/**FlashLight intensity*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=FlashLight)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=FlashLight)
 	float intensity;
 
 	/**FlashLight cone angle*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=FlashLight)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=FlashLight)
 	float outerConeAngle;
 	
 	/**Player Inventory*/
@@ -67,6 +69,7 @@ protected:
 
 	/** Called to turn on/off the flash light*/
 	void TurnFlashLight();
+	
 	/** 
 	 * Called via input to turn at a given rate. 
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
@@ -105,10 +108,12 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-	
+
+	//For the moment this function is useless
 	UFUNCTION(BlueprintCallable, Category="HealthSystem")
 	float AddHealth(float value) { return health += value;}
 
+	//LineTrace to check what object the player attacks,wants..
 	UFUNCTION(BlueprintCallable, Category="LineTraceObjects")
 	void LineTraceForObjects();
 };

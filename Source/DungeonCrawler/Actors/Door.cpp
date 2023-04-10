@@ -37,7 +37,8 @@ void ADoor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	this->startRotation = this->GetActorRotation();
-	
+
+	//Check to begin the rotation
 	if(this->isOpen)
 	{
 		if(this->WaitTime > 0)
@@ -46,13 +47,16 @@ void ADoor::Tick(float DeltaTime)
 			return;
 		}
 
+		//Check the time to open the door 
 		if(timeElapsed < lerpDuration)
 		{
-
+			//New rotator each time
 			FRotator newRotator = FMath::Lerp(startRotation, targetRotator, timeElapsed / lerpDuration);
-		
+
+			//It's applied here
 			this->SetActorRotation(newRotator);
 
+			//++
 			timeElapsed += DeltaTime;
 		}
 	}

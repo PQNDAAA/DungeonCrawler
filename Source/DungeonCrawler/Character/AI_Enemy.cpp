@@ -26,7 +26,8 @@ AAI_Enemy::AAI_Enemy()
 	this->SphereCollider->SetGenerateOverlapEvents(true);
 	this->SphereCollider->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	this->SphereCollider->SetupAttachment(RootComponent);
-	
+
+	//Assign several overlap events
 	this->CapsuleCollider->OnComponentBeginOverlap.AddDynamic(this,&AAI_Enemy::OnOverlapBeginDamage);
 	
 	this->SphereCollider->OnComponentBeginOverlap.AddDynamic(this,&AAI_Enemy::OnOverlapBeginWalk);
@@ -44,6 +45,7 @@ void AAI_Enemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//Check if AI chases the player through the labyrinth
 	if(!isChasingPlayer)
 	{
 		MoveRandomly();
@@ -91,7 +93,8 @@ void AAI_Enemy::OnOverlapBeginDamage(UPrimitiveComponent* OverlappedComp, AActor
 	
 	if(player != nullptr && OtherActor != this && OtherComp)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Apply Damage"));
+		//Debug for me 
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Apply Damage"));
 		OtherActor->TakeDamage(damage,FDamageEvent(UDamageType::StaticClass()),GetWorld()->GetFirstPlayerController(),this);
 	}
 }
@@ -105,6 +108,8 @@ void AAI_Enemy::OnOverlapBeginWalk(UPrimitiveComponent* OverlappedComp, AActor* 
 	if(player != nullptr && OtherActor != this && OtherComp)
 	{
 		this->isChasingPlayer = true;
+		
+		//Reset the random path if the AI would lose the player 
 		this->hasRandomPath = false;
 	}
 }
@@ -139,10 +144,12 @@ void AAI_Enemy::MoveRandomly()
 	if(!hasRandomPath)
 	{
 		targetPositionToMove = UBFL_Main::GetRandomReachablePoint(this->GetActorLocation(),500);
+		//MoveToRandomPath
 		EnemyController->MoveToLocation(targetPositionToMove,-1);
 		hasRandomPath = true;
 	}
 
+	//Check the AI status to uncheck the bool random path
 	if(EnemyController->GetPathFollowingComponent()->GetStatus() == EPathFollowingStatus::Idle && hasRandomPath)
 	{
 		hasRandomPath = false;

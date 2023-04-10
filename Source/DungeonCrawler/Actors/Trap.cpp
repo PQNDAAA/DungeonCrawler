@@ -21,12 +21,14 @@ ATrap::ATrap()
 
 	SetActorEnableCollision(true);
 
+	//Initialize the sphere collider 
 	this->SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
 	this->SphereCollider->InitSphereRadius(150.0f);
 	this->SphereCollider->SetGenerateOverlapEvents(true);
 	this->SphereCollider->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	this->SphereCollider->SetupAttachment(MeshComponent);
-	
+
+	//Assign it 
 	this->SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &ATrap::OnOverlapBegin);
 	
 }
@@ -36,6 +38,7 @@ void ATrap::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//to add more fun
 	damage = FMath::RandRange(10,35);
 	
 }
@@ -54,7 +57,8 @@ void ATrap::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 
 	if(player != nullptr && OtherActor != this && OtherComp)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Apply Damage"));
+		//Debug for me 
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Apply Damage"));
 		OtherActor->TakeDamage(damage,FDamageEvent(UDamageType::StaticClass()),GetWorld()->GetFirstPlayerController(),this);
 		
 	}

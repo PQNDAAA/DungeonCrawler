@@ -18,15 +18,17 @@ public:
 	//DoorSMComponent
 	UPROPERTY(EditAnywhere,Category="Door")
 	UStaticMeshComponent* MeshComponent;
+	
 	UPROPERTY(EditAnywhere,Category="Door")
 	bool isOpen = false;
+
+	//Var for lerp
 	UPROPERTY(EditAnywhere,Category=Lerp, Meta=(MakeEditWidget = true))
 	FRotator targetRotator;
 	UPROPERTY(EditAnywhere,Category=Lerp)
 	float lerpDuration = 3;
 	UPROPERTY(EditAnywhere,Category=Lerp)
 	float WaitTime = 3;
-
 	FRotator startRotation;
 	float timeElapsed =0.f;
 	

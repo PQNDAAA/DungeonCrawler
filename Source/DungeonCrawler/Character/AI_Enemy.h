@@ -22,11 +22,11 @@ public:
 	// Sets default values for this character's properties
 	AAI_Enemy();
 
-	//Static Mesh 
+	//StaticMeshComponent  
 	UPROPERTY(VisibleAnywhere, Category="SM")
 	UStaticMeshComponent* SM;
 
-	//Capsule Collider
+	//Capsule Collider 
 	UPROPERTY(VisibleAnywhere, Category="Capsule")
 	UCapsuleComponent* CapsuleCollider;
 
@@ -34,22 +34,26 @@ public:
 	UPROPERTY(VisibleAnywhere,Category="Sphere")
 	USphereComponent* SphereCollider;
 
+	//Damage
 	UPROPERTY(EditAnywhere, Category="Damage System")
 	float damage = 10.f;
 
+	//Health
 	UPROPERTY(EditAnywhere, Category="Health System")
 	float health = 40.f;
 
+	//Speed Movement "Walk"
 	UPROPERTY(EditAnywhere, Category="Walk System")
 	float speedMovement = 200.f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	bool isChasingPlayer = false;
 
-	UPROPERTY(EditAnywhere, Category="Walk System")
+	UPROPERTY()
 	bool hasRandomPath = false;
 
-	UPROPERTY(EditAnywhere, Category="Walk System")
+	//targetPosition if the AI has a random Path
+	UPROPERTY()
 	FVector targetPositionToMove;
 
 protected:
@@ -66,7 +70,8 @@ protected:
 	AActor* DamageCauser) override;
 
 public:	
-	
+
+	//MoveToPlayer Function
 	UFUNCTION()
 	void MoveTo();
 
@@ -92,6 +97,7 @@ public:
 		class UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex);
 
+	//Move Randomly
 	UFUNCTION(BlueprintCallable, Category="Walk System")
 	void MoveRandomly();
 	

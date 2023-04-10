@@ -30,7 +30,7 @@ ADungeonCrawlerCharacter::ADungeonCrawlerCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-	//Thomas doit avoir au moins 19.5/20 parce que je l'adore
+	
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
@@ -164,7 +164,7 @@ void ADungeonCrawlerCharacter::TurnFlashLight()
 	this->FlashLight->ToggleVisibility();
 }
 
-//Make a line trace for objects -> open door 
+//Make a line trace for objects -> open door -> attack -> add inventory...
 void ADungeonCrawlerCharacter::LineTraceForObjects()
 {
 	FHitResult OutHit;
@@ -199,7 +199,8 @@ void ADungeonCrawlerCharacter::LineTraceForObjects()
 	}
 	if(bHitObject && enemy !=nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Enemy"));
+		//Debug for me 
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Enemy"));
 		OutHit.GetActor()->TakeDamage(this->damage,FDamageEvent(UDamageType::StaticClass()),
 			GetWorld()->GetFirstPlayerController(),this);
 	}

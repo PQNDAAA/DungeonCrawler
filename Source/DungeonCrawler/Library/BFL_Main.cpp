@@ -7,7 +7,10 @@ void UBFL_Main::AddActorInventory(AActor* targetPlayer,AActor* actor, int32 quan
 {
 	ADungeonCrawlerCharacter* player = Cast<ADungeonCrawlerCharacter>(targetPlayer);
 
+	//Add
 	player->characterInventory.Add(actor,quantity);
+	
+	//Debug 
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Item added and destroy.")));
 	actor->K2_DestroyActor();
 
