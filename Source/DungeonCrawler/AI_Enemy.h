@@ -9,6 +9,7 @@
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
 #include "EnemyController.h"
+#include "Components/SphereComponent.h"
 #include "DungeonCrawler/Library/BFL_Main.h"
 #include "AI_Enemy.generated.h"
 
@@ -25,9 +26,13 @@ public:
 	UPROPERTY(VisibleAnywhere, Category="SM")
 	UStaticMeshComponent* SM;
 
-	//Sphere Collider
+	//Capsule Collider
 	UPROPERTY(VisibleAnywhere, Category="Capsule")
 	UCapsuleComponent* CapsuleCollider;
+
+	//Sphere Collider
+	UPROPERTY(VisibleAnywhere,Category="Sphere")
+	USphereComponent* SphereCollider;
 
 	UPROPERTY(EditAnywhere, Category="Damage System")
 	float damage = 10.f;
@@ -37,6 +42,15 @@ public:
 
 	UPROPERTY(EditAnywhere, Category="Walk System")
 	float speedMovement = 200.f;
+
+	UPROPERTY(EditAnywhere)
+	bool isChasingPlayer = false;
+
+	UPROPERTY(EditAnywhere, Category="Walk System")
+	bool hasPath = false;
+
+	UPROPERTY(EditAnywhere, Category="Walk System")
+	FVector targetPositionToMove;
 
 protected:
 	// Called when the game starts or when spawned
@@ -57,11 +71,25 @@ public:
 	void MoveTo();
 
 	UFUNCTION()
-	void OnOverlapBegin(class UPrimitiveComponent *OverlappedComp,
+	void OnOverlapBeginDamage(class UPrimitiveComponent *OverlappedComp,
+		class AActor* OtherActor,
+		class UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnOverlapBeginWalk(class UPrimitiveComponent *OverlappedComp,
 		class AActor* OtherActor,
 		class UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex,
 		bool bFromSweep,
 		const FHitResult& SweepResult);
 
+	UFUNCTION()
+	void OnOverlapEndWalk(class UPrimitiveComponent *OverlappedComp,
+		class AActor* OtherActor,
+		class UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex);
+	
 };

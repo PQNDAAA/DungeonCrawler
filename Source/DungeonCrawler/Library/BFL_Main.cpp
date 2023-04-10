@@ -23,6 +23,17 @@ bool UBFL_Main::isPlayerDead(float health)
 	return health <= 0.f;
 }
 
+FVector UBFL_Main::GetRandomReachablePoint(FVector Origin,float Radius)
+{
+		FVector2d randomPoint = FMath::RandPointInCircle(Radius);
+		FVector Point = Origin + FVector(randomPoint.X,randomPoint.Y,Origin.Z);
+
+		return Point;
+}
+
+
+
+
 
 
 

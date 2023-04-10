@@ -22,5 +22,8 @@ public:
 	UFUNCTION(BlueprintCallable,Category="Health System")
 	static bool isPlayerDead(float health);
 
+	UFUNCTION(BlueprintCallable, Category="RandomWalk System")
+	static FVector GetRandomReachablePoint(FVector Origin,float Radius);
+
 	
 };
