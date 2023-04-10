@@ -209,6 +209,7 @@ void ADungeonCrawlerCharacter::LineTraceForObjects()
 float ADungeonCrawlerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AController* EventInstigator, AActor* DamageCauser)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ReduceHealth"));
 	this->ReduceHealth(DamageAmount);
 	this->PlayerIsDead();
 

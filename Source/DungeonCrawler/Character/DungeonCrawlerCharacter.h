@@ -90,9 +90,6 @@ protected:
 
 	//Called at the beginning
 	virtual void BeginPlay() override;
-
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-		AActor* DamageCauser) override;
 	
 public:
 	
@@ -115,7 +112,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="LineTraceObjects")
 	void LineTraceForObjects();
-	
+
+private:
+
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser) override;
 	
 };
 
