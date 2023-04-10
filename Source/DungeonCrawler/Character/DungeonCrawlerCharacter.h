@@ -112,11 +112,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="LineTraceObjects")
 	void LineTraceForObjects();
-
-private:
-
+	
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser) override;
-	
 };
 

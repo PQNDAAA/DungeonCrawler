@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "DungeonCrawler/Character/DungeonCrawlerCharacter.h"
-#include "Navigation/PathFollowingComponent.h"
+#include "Components/SphereComponent.h"
+#include "EnemyController.h"
 #include "AI_Enemy.generated.h"
 
 UCLASS()
@@ -17,12 +18,13 @@ public:
 	// Sets default values for this character's properties
 	AAI_Enemy();
 
-	//Sphere Collider 
-	UPROPERTY(VisibleAnywhere, Category="Sphere")
+	//Static Mesh 
+	UPROPERTY(VisibleAnywhere, Category="SM")
 	UStaticMeshComponent* SM;
 
-	UPROPERTY(EditAnywhere, Category="Actor")
-	AActor* destinationActor;
+	//Sphere Collider
+	UPROPERTY(VisibleAnywhere, Category="Sphere")
+	USphereComponent* SphereCollider;
 
 	UPROPERTY(EditAnywhere, Category="Damage")
 	float damage = 10.f;
@@ -39,7 +41,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	UFUNCTION()
-	void MoveTo(AActor* targetActor);
+	void MoveTo();
 
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent *OverlappedComp,

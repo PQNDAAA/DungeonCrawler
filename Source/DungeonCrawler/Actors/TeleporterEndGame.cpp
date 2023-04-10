@@ -3,8 +3,6 @@
 
 #include "TeleporterEndGame.h"
 
-#include "Components/SphereComponent.h"
-
 // Sets default values
 ATeleporterEndGame::ATeleporterEndGame()
 {

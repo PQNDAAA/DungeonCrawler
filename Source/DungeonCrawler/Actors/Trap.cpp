@@ -2,9 +2,6 @@
 
 
 #include "Trap.h"
-
-#include "Kismet/GameplayStatics.h"
-
 // Sets default values
 ATrap::ATrap()
 {
