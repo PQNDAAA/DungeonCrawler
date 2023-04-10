@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "DungeonCrawler/Character/DungeonCrawlerCharacter.h"
-#include "Components/SphereComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/Character.h"
+#include "Components/CapsuleComponent.h"
 #include "EnemyController.h"
+#include "DungeonCrawler/Library/BFL_Main.h"
 #include "AI_Enemy.generated.h"
 
 UCLASS()
@@ -23,8 +26,8 @@ public:
 	UStaticMeshComponent* SM;
 
 	//Sphere Collider
-	UPROPERTY(VisibleAnywhere, Category="Sphere")
-	USphereComponent* SphereCollider;
+	UPROPERTY(VisibleAnywhere, Category="Capsule")
+	UCapsuleComponent* CapsuleCollider;
 
 	UPROPERTY(EditAnywhere, Category="Damage System")
 	float damage = 10.f;
@@ -33,18 +36,22 @@ public:
 	float health = 40.f;
 
 	UPROPERTY(EditAnywhere, Category="Walk System")
-	float speedMovement = 800.f;
+	float speedMovement = 200.f;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+AActor* DamageCauser) override;
+
+public:	
 	
 	UFUNCTION()
 	void MoveTo();

@@ -16,5 +16,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category="CharacterInventory")
 	static void AddActorInventory(AActor* targetPlayer,AActor* actor, int32 quantity);
 
+	UFUNCTION(BlueprintCallable,Category="Health System")
+	static float ReduceHealth(float damage,float health);
+
+	UFUNCTION(BlueprintCallable,Category="Health System")
+	static bool isPlayerDead(float health);
+
 	
 };

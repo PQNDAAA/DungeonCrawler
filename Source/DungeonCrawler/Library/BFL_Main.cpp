@@ -13,5 +13,17 @@ void UBFL_Main::AddActorInventory(AActor* targetPlayer,AActor* actor, int32 quan
 
 }
 
+float UBFL_Main::ReduceHealth(float damage, float health)
+{
+	return health -= damage;
+}
+
+bool UBFL_Main::isPlayerDead(float health)
+{
+	return health <= 0.f;
+}
+
+
+
 
 

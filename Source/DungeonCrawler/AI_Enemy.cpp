@@ -4,23 +4,24 @@
 #include "AI_Enemy.h"
 
 
-
 // Sets default values
 AAI_Enemy::AAI_Enemy()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	GetCharacterMovement()->MaxWalkSpeed = this->speedMovement;
 
 	this->SM = CreateDefaultSubobject<UStaticMeshComponent>(FName("SM"));
 	this->SM->SetupAttachment(RootComponent);
 
-	this->SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
-	this->SphereCollider->InitSphereRadius(150.0f);
-	this->SphereCollider->SetGenerateOverlapEvents(true);
-	this->SphereCollider->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
-	this->SphereCollider->SetupAttachment(SM);
+	this->CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("SphereCollider"));
+	this->CapsuleCollider->InitCapsuleSize(70.f, 96.0f);
+	this->CapsuleCollider->SetGenerateOverlapEvents(true);
+	this->CapsuleCollider->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	this->CapsuleCollider->SetupAttachment(SM);
 	
-	this->SphereCollider->OnComponentBeginOverlap.AddDynamic(this,&AAI_Enemy::OnOverlapBegin);
+	this->CapsuleCollider->OnComponentBeginOverlap.AddDynamic(this,&AAI_Enemy::OnOverlapBegin);
 	
 }
 
@@ -28,7 +29,6 @@ AAI_Enemy::AAI_Enemy()
 void AAI_Enemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -64,6 +64,16 @@ void AAI_Enemy::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 		OtherActor->TakeDamage(damage,FDamageEvent(UDamageType::StaticClass()),GetWorld()->GetFirstPlayerController(),this);
 	}
 }
+
+float AAI_Enemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	this->health = UBFL_Main::ReduceHealth(DamageAmount,this->health);
+	UBFL_Main::isPlayerDead(this->health) ? this->K2_DestroyActor(), true : false;
+
+	return DamageAmount;
+}
+
 
 
 

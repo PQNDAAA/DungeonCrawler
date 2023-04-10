@@ -27,12 +27,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+	//Flash Light Component
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = FlashLight, meta = (AllowPrivateAccess = "true"))
 	class USpotLightComponent* FlashLight;
 
 	/**Based on the health system, storage the health*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Stats)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Health System")
 	float health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="boolState")
+	bool isDead = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Damage System")
+	float damage;
 
 	/**FlashLight intensity*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=FlashLight)
@@ -41,15 +48,13 @@ public:
 	/**FlashLight cone angle*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=FlashLight)
 	float outerConeAngle;
-
-	/**Check if the player is dead */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=boolState)
-	bool isDead;
-
+	
 	/**Player Inventory*/
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category=Inventory)
 	TMap<AActor*, int32> characterInventory;
 
+	/**Store the key in inventory*/
+	UPROPERTY()
 	AKeyActor* keyInventory;
 
 protected:
@@ -90,6 +95,9 @@ protected:
 
 	//Called at the beginning
 	virtual void BeginPlay() override;
+
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+AActor* DamageCauser) override;
 	
 public:
 	
@@ -97,23 +105,11 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
-	UFUNCTION(BlueprintCallable, Category="HealthSystem")
-	float GetHealth() const { return health; }
-	
-	UFUNCTION(BlueprintCallable, Category="HealthSystem")
-	float ReduceHealth(float value) { return health -= value;}
 	
 	UFUNCTION(BlueprintCallable, Category="HealthSystem")
 	float AddHealth(float value) { return health += value;}
 
-	UFUNCTION(BlueprintCallable, Category="HealthSystem")
-	void PlayerIsDead();
-
 	UFUNCTION(BlueprintCallable, Category="LineTraceObjects")
 	void LineTraceForObjects();
-	
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-	AActor* DamageCauser) override;
 };
 

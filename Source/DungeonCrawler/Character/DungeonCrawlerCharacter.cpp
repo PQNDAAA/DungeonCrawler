@@ -3,6 +3,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SpotLightComponent.h"
+#include "DungeonCrawler/AI_Enemy.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -10,20 +11,20 @@
 ADungeonCrawlerCharacter::ADungeonCrawlerCharacter()
 {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.f);
 
 	// set our turn rate for input
 	TurnRateGamepad = 50.f;
 
 	//Define var HealthSystem
-	this->health = 100.0f;
-	this->isDead = false;
+	this->health = 100.f;
+
+	//Define var DamageSystem
+	this->damage = 10.f;
 
 	//Define FlashLight var
-	this->intensity = 3300.0f;
-	this->outerConeAngle = 26.0f;
-
-	
+	this->intensity = 3300.f;
+	this->outerConeAngle = 26.f;
 	
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -163,15 +164,6 @@ void ADungeonCrawlerCharacter::TurnFlashLight()
 	this->FlashLight->ToggleVisibility();
 }
 
-//Check if the player is dead or not 
-void ADungeonCrawlerCharacter::PlayerIsDead()
-{
-	if(this->health <= 0)
-	{
-		this->isDead = true;
-	}
-}
-
 //Make a line trace for objects -> open door 
 void ADungeonCrawlerCharacter::LineTraceForObjects()
 {
@@ -193,6 +185,7 @@ void ADungeonCrawlerCharacter::LineTraceForObjects()
 	//Get Actors
 	ADoor* door = Cast<ADoor>(OutHit.GetActor());
 	AKeyActor* keyactor = Cast<AKeyActor>(OutHit.GetActor());
+	AAI_Enemy* enemy = Cast<AAI_Enemy>(OutHit.GetActor());
 	
 	if(bHitObject && door != nullptr && this->characterInventory.Contains(keyInventory) && (!door->isOpen))
 	{
@@ -204,15 +197,20 @@ void ADungeonCrawlerCharacter::LineTraceForObjects()
 		UBFL_Main::AddActorInventory(this,keyactor,1);
 		this->keyInventory = keyactor;
 	}
+	if(bHitObject && enemy !=nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Enemy"));
+		OutHit.GetActor()->TakeDamage(this->damage,FDamageEvent(UDamageType::StaticClass()),
+			GetWorld()->GetFirstPlayerController(),this);
+	}
 }
 
 float ADungeonCrawlerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AController* EventInstigator, AActor* DamageCauser)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ReduceHealth"));
-	this->ReduceHealth(DamageAmount);
-	this->PlayerIsDead();
-
+	this->health = UBFL_Main::ReduceHealth(DamageAmount,this->health);
+	UBFL_Main::isPlayerDead(this->health) ? this->isDead = true, true : false;
+	
 	return DamageAmount;
 }
 
