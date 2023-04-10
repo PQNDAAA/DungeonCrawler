@@ -44,21 +44,13 @@ void AAI_Enemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	AEnemyController* EnemyController = Cast<AEnemyController>(GetController());
-
 	if(!isChasingPlayer)
 	{
-		if(!hasPath)
-		{
-			targetPositionToMove = UBFL_Main::GetRandomReachablePoint(this->GetActorLocation(),500);
-			EnemyController->MoveToLocation(targetPositionToMove,-1);
-			hasPath = true;
-		}
-
-		if(EnemyController->GetPathFollowingComponent()->GetStatus() == EPathFollowingStatus::Idle && hasPath)
-		{
-			hasPath = false;
-		}
+		MoveRandomly();
+	}
+	else
+	{
+		MoveTo();	
 	}
 
 	//NOTE FOR ME
@@ -88,7 +80,7 @@ void AAI_Enemy::MoveTo()
 {
 	AEnemyController* EnemyController = Cast<AEnemyController>(GetController());
 
-	EnemyController->MoveToActor(GetWorld()->GetFirstPlayerController()->GetPawn(),30.f);
+	EnemyController->MoveToActor(GetWorld()->GetFirstPlayerController()->GetPawn(),-1.f);
 }
 
 //Overlap Begin to inflict damage 
@@ -112,9 +104,8 @@ void AAI_Enemy::OnOverlapBeginWalk(UPrimitiveComponent* OverlappedComp, AActor* 
 
 	if(player != nullptr && OtherActor != this && OtherComp)
 	{
-		MoveTo();
-		isChasingPlayer = true;
-		hasPath = false;
+		this->isChasingPlayer = true;
+		this->hasRandomPath = false;
 	}
 }
 
@@ -139,6 +130,25 @@ float AAI_Enemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 
 	return DamageAmount;
 }
+
+/**Move Randomly through this function "GetRandomReachablePoint" and check if AI has a path or not*/ 
+void AAI_Enemy::MoveRandomly()
+{
+	AEnemyController* EnemyController = Cast<AEnemyController>(GetController());
+	
+	if(!hasRandomPath)
+	{
+		targetPositionToMove = UBFL_Main::GetRandomReachablePoint(this->GetActorLocation(),500);
+		EnemyController->MoveToLocation(targetPositionToMove,-1);
+		hasRandomPath = true;
+	}
+
+	if(EnemyController->GetPathFollowingComponent()->GetStatus() == EPathFollowingStatus::Idle && hasRandomPath)
+	{
+		hasRandomPath = false;
+	}
+}
+
 
 
 

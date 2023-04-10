@@ -8,7 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
-#include "EnemyController.h"
+#include "DungeonCrawler/Controllers/EnemyController.h"
 #include "Components/SphereComponent.h"
 #include "DungeonCrawler/Library/BFL_Main.h"
 #include "AI_Enemy.generated.h"
@@ -47,7 +47,7 @@ public:
 	bool isChasingPlayer = false;
 
 	UPROPERTY(EditAnywhere, Category="Walk System")
-	bool hasPath = false;
+	bool hasRandomPath = false;
 
 	UPROPERTY(EditAnywhere, Category="Walk System")
 	FVector targetPositionToMove;
@@ -63,7 +63,7 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-AActor* DamageCauser) override;
+	AActor* DamageCauser) override;
 
 public:	
 	
@@ -91,5 +91,8 @@ public:
 		class AActor* OtherActor,
 		class UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex);
+
+	UFUNCTION(BlueprintCallable, Category="Walk System")
+	void MoveRandomly();
 	
 };
